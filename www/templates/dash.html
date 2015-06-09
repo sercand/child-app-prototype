@@ -1,47 +1,13 @@
 <ion-view view-title="Dashboard">
     <ion-content>
         <div class="bar bar-header bar-balanced">
-            <h1 class="title">Otsimo</h1>
+            <h1 class="title"><img width="auto" height="50px" src="img/logo.png"></h1>
         </div>
         <div class="padding headerup">
             <ion-slide-box>
-                <ion-slide>
-                    <div class="dashgrid">
-                        <img src="img/cover.jpg">
-                    </div>
-                    <div class="dashgrid">
-                        <img src="img/cover.jpg">
-                    </div>
-                    <div class="dashgrid">
-                        <img src="img/cover.jpg">
-                    </div>
-                    <div class="dashgrid">
-                        <img src="img/cover.jpg">
-                    </div>
-                </ion-slide>
-                <ion-slide>
-                    <div class="dashgrid">
-                        <img src="img/cover.jpg">
-                    </div>
-                    <div class="dashgrid">
-                        <img src="img/cover.jpg">
-                    </div>
-                    <div class="dashgrid">
-                        <img src="img/cover.jpg">
-                    </div>
-                    <div class="dashgrid">
-                        <img src="img/cover.jpg">
-                    </div>
-                </ion-slide>
-                <ion-slide>
-                    <div class="dashgrid">
-                        <img src="img/cover.jpg">
-                    </div>
-                    <div class="dashgrid">
-                        <img src="img/cover.jpg">
-                    </div>
-                    <div class="dashgrid">
-                        <img src="img/cover.jpg">
+                <ion-slide ng-repeat="rows in chunkedData">
+                    <div class="dashgrid" ng-repeat="game in rows">
+                        <a href="{{game.link}}"><img src="{{game.img}}"></a>
                     </div>
                 </ion-slide>
             </ion-slide-box>

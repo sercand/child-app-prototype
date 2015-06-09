@@ -3,18 +3,21 @@
 
         <div class="list foot">
             <img width="100%" height="auto" src="img/logo.png">
-            <label class="item item-input item-floating-label">
-                <span class="input-label">Email</span>
-                <input type="text" placeholder="Email">
-            </label>
-            <label class="item item-input item-floating-label">
-                <span class="input-label">Password</span>
-                <input type="password" placeholder="Password">
-            </label>
-            <button class="button button-block button-positive">Log In</button>
-            <button class="button button-block button-calm">
-                Aren't you a user? Download Parent App first!
-            </button>
+
+            <form ng-submit="doLogin()">
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Email</span>
+                    <input type="text" placeholder="Email" ng-model="loginData.email">
+                </label>
+                <label class="item item-input item-floating-label">
+                    <span class="input-label">Password</span>
+                    <input type="password" placeholder="Password" ng-model="loginData.password">
+                </label>
+                <button class="button button-block button-positive">Log In</button>
+                <button class="button button-block button-calm" type="submit">
+                    Aren't you a user? Download Parent App first!
+                </button>
+            </form>
         </div>
     </ion-content>
 </ion-view>

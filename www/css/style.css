@@ -1,7 +1,13 @@
 /* Empty. Add your own CSS if you like */
+.bar{
+    height: 60px;
+}
 .headerup{
-    padding-top: 44px;
+    padding-top: 60px;
     height: 100%;
+}
+.bar .title {
+    top: 8px;
 }
 .slider {
     height: 100%;
