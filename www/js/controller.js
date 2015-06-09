@@ -4,30 +4,29 @@
 angular.module('starter.controllers', [])
 
     .controller('DashCtrl', function ($scope) {
-        $scope.info =
-        {
-            games : [
-                {link:'./#', img : "img/cover.jpg" , name:'1'},
-                {link:'./#', img : "img/cover.jpg" , name:'2'},
-                {link:'./#', img : "img/cover.jpg" , name:'3'},
-                {link:'./#', img : "img/cover.jpg" , name:'4'},
-                {link:'./#', img : "img/cover.jpg" , name:'5img/cover.jpg'},
-                {link:'./#', img : "img/cover.jpg" , name:'6'},
-                {link:'./#', img : "img/cover.jpg" , name:'7'},
-                {link:'./#', img : "img/cover.jpg" , name:'8'},
-                {link:'./#', img : "img/cover.jpg" , name:'9'},
-                {link:'./#', img : "img/cover.jpg" , name:'10'}
-            ]
-        };
-        $scope.chunker = function chunk(arr, size) {
-            var newArr = [];
-            for (var i=0; i<arr.length; i+=size) {
-                newArr.push(arr.slice(i, i+size));
-            }
-            return newArr;
-        };
 
-        $scope.chunkedData = chunker(games, 4);
+        var games = [
+            {link: './#', img: "img/cover.jpg", name: '1'},
+            {link: './#', img: "img/cover.jpg", name: '2'},
+            {link: './#', img: "img/cover.jpg", name: '3'},
+            {link: './#', img: "img/cover.jpg", name: '4'},
+            {link: './#', img: "img/cover.jpg", name: '5'},
+            {link: './#', img: "img/cover.jpg", name: '6'},
+            {link: './#', img: "img/cover.jpg", name: '7'},
+            {link: './#', img: "img/cover.jpg", name: '8'},
+            {link: './#', img: "img/cover.jpg", name: '9'}
+        ];
+
+        function chunk(arr, size) {
+            var newArr = [];
+            for (var i = 0; i < arr.length; i += size) {
+                newArr.push(arr.slice(i, i + size));
+            }
+
+            return newArr;
+        }
+
+        $scope.chunkedData = chunk(games, 4);
     })
 
     .controller('GameCtrl', function ($scope) {
