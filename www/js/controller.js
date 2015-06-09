@@ -3,18 +3,18 @@
  */
 angular.module('starter.controllers', [])
 
-    .controller('DashCtrl', function ($scope) {
+    .controller('DashCtrl', function ($scope, $http, Auth) {
 
         var games = [
-            {link: './#', img: "img/cover.jpg", name: '1'},
-            {link: './#', img: "img/cover.jpg", name: '2'},
-            {link: './#', img: "img/cover.jpg", name: '3'},
-            {link: './#', img: "img/cover.jpg", name: '4'},
-            {link: './#', img: "img/cover.jpg", name: '5'},
-            {link: './#', img: "img/cover.jpg", name: '6'},
-            {link: './#', img: "img/cover.jpg", name: '7'},
-            {link: './#', img: "img/cover.jpg", name: '8'},
-            {link: './#', img: "img/cover.jpg", name: '9'}
+            {logo: "img/cover.jpg", id: ""},
+            {logo: "img/cover.jpg", id: ""},
+            {logo: "img/cover.jpg", id: ""},
+            {logo: "img/cover.jpg", id: ""},
+            {logo: "img/cover.jpg", id: ""},
+            {logo: "img/cover.jpg", id: ""},
+            {logo: "img/cover.jpg", id: ""},
+            {logo: "img/cover.jpg", id: ""},
+            {logo: "img/cover.jpg", id: ""}
         ];
 
         function chunk(arr, size) {
@@ -26,7 +26,41 @@ angular.module('starter.controllers', [])
             return newArr;
         }
 
-        $scope.chunkedData = chunk(games, 4);
+        $scope.openGame = function (game) {
+            console.log(game.name);
+        };
+
+        $scope.chunkedData = [];
+
+        function loadGames(games) {
+            for (var i = 0; i < games.length; i++) {
+                if (!games[i].active)continue;
+
+                $http.get(Auth.apiUrl + '/game/' + games[i].id)
+                    .success(function (data) {
+                        if (data.success) {
+                            console.log(data.data);
+                            if ($scope.chunkedData.length === 0) {
+                                $scope.chunkedData.push([data.data]);
+                            } else {
+                                var last = $scope.chunkedData[$scope.chunkedData.length - 1];
+                                if (last.length === 4) {
+                                    $scope.chunkedData.push([data.data]);
+                                } else {
+                                    last.push(data.data);
+                                }
+                            }
+                            $scope.$$phase || $scope.$apply();
+                        }
+                    })
+                    .error(function (data) {
+                        console.log("ERROR", data);
+                    });
+            }
+        }
+
+        loadGames(Auth.child.games);
+
     })
 
     .controller('GameCtrl', function ($scope) {

@@ -43,7 +43,6 @@ angular.module('starter.auth', [])
 
         authService.parent = $localStorage.getObject("parent");
         authService.child = $localStorage.getObject("child");
-
         authService.nextResults = [];
 
         function setParentData(data) {
@@ -153,6 +152,7 @@ angular.module('starter.auth', [])
 
                 });
         };
+
 
         if (authService.isLoggedIn) {
             authService.getParentData(authService.parentId, function (err, doc) {

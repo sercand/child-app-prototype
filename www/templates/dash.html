@@ -7,7 +7,7 @@
             <ion-slide-box>
                 <ion-slide ng-repeat="rows in chunkedData">
                     <div class="dashgrid" ng-repeat="game in rows">
-                        <a href="{{game.link}}"><img src="{{game.img}}"></a>
+                        <div ng-click="openGame(game)"><img src="{{ game.logo }}"></div>
                     </div>
                 </ion-slide>
             </ion-slide-box>
