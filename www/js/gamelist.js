@@ -22,7 +22,7 @@ var playableGameList = [
         }
     },
     {
-        id: "557785d85c21a8d378fce8bc",
+        id: "557785ff5c21a8d378fce8be",
         name: "Bir Renk Sec",
         logo: "../img/app3.png",
         run: function (state) {
