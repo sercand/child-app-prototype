@@ -8,7 +8,7 @@ var playableGameList = [
     {
         id: "5576cbff4a2caa680b4318fc",
         name: "Eslesme oyunu",
-        logo: "https://s3.eu-central-1.amazonaws.com/otsimo/esleme/logo.png",
+        logo: "../img/app3.png",
         run: function (state) {
             runBiRenkSecGame(state);
         }
