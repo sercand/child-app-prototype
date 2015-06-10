@@ -14,7 +14,11 @@ angular.module('starter.auth', [])
                 localStorage.setItem(key, JSON.stringify(value))
             },
             getObject: function (key) {
-                return JSON.parse(localStorage.getItem(key) || '{}');
+                try {
+                    return JSON.parse(localStorage.getItem(key) || '{}');
+                } catch (err) {
+                    return {}
+                }
             }
         }
     })
@@ -34,8 +38,8 @@ angular.module('starter.auth', [])
             }
         };
 
-        authService.serverUrl = "http://localhost:6001";
-        //  authService.serverUrl = "http://10.10.1.81:3000";
+        //authService.serverUrl = "http://localhost:6001";
+        authService.serverUrl = "http://46.101.185.157:6001";
         authService.apiUrl = authService.serverUrl + "/api/v1";
 
 

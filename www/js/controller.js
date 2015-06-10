@@ -1,75 +1,68 @@
 /**
  * Created by Zafer on 9.6.2015.
  */
+var nextgame = null;
 angular.module('starter.controllers', [])
 
-    .controller('DashCtrl', function ($scope, $http, Auth) {
-
-        var games = [
-            {logo: "img/cover.jpg", id: ""},
-            {logo: "img/cover.jpg", id: ""},
-            {logo: "img/cover.jpg", id: ""},
-            {logo: "img/cover.jpg", id: ""},
-            {logo: "img/cover.jpg", id: ""},
-            {logo: "img/cover.jpg", id: ""},
-            {logo: "img/cover.jpg", id: ""},
-            {logo: "img/cover.jpg", id: ""},
-            {logo: "img/cover.jpg", id: ""}
-        ];
-
-        function chunk(arr, size) {
-            var newArr = [];
-            for (var i = 0; i < arr.length; i += size) {
-                newArr.push(arr.slice(i, i + size));
-            }
-
-            return newArr;
-        }
+    .controller('DashCtrl', function ($scope, $state, $http, Auth) {
 
         $scope.openGame = function (game) {
             console.log(game.name);
+            nextgame = game;
+            $state.go('game');
         };
 
         $scope.chunkedData = [];
 
+        function addToChunkedData(data) {
+            console.log(data);
+            if ($scope.chunkedData.length === 0) {
+                $scope.chunkedData.push([data]);
+            } else {
+                var last = $scope.chunkedData[$scope.chunkedData.length - 1];
+                if (last.length === 4) {
+                    $scope.chunkedData.push([data]);
+                } else {
+                    last.push(data);
+                }
+            }
+            $scope.$$phase || $scope.$apply();
+        }
+
         function loadGames(games) {
             for (var i = 0; i < games.length; i++) {
                 if (!games[i].active)continue;
-
-                $http.get(Auth.apiUrl + '/game/' + games[i].id)
-                    .success(function (data) {
-                        if (data.success) {
-                            console.log(data.data);
-                            if ($scope.chunkedData.length === 0) {
-                                $scope.chunkedData.push([data.data]);
-                            } else {
-                                var last = $scope.chunkedData[$scope.chunkedData.length - 1];
-                                if (last.length === 4) {
-                                    $scope.chunkedData.push([data.data]);
-                                } else {
-                                    last.push(data.data);
-                                }
+                var g = findGameFromList(games[i].id);
+                if (g) {
+                    g.itIsLocal = true;
+                    addToChunkedData(g);
+                } else {
+                    $http.get(Auth.apiUrl + '/game/' + games[i].id)
+                        .success(function (data) {
+                            if (data.success) {
+                                data.data.itIsLocal = false;
+                                addToChunkedData(data.data);
                             }
-                            $scope.$$phase || $scope.$apply();
-                        }
-                    })
-                    .error(function (data) {
-                        console.log("ERROR", data);
-                    });
+                        })
+                        .error(function (data) {
+                            console.log("ERROR", data);
+                        });
+                }
             }
         }
 
         loadGames(Auth.child.games);
-
     })
 
-    .controller('GameCtrl', function ($scope) {
-        $scope.info =
-        {
-            gameName: 'Zafer Oyunda'
+    .controller('GameCtrl', function ($scope, $ionicLoading, $state) {
+        $scope.isReady = function () {
+            console.log("IS READY");
         };
+        console.log(nextgame.name);
+        if (typeof nextgame.run === 'function') {
+            nextgame.run($state);
+        }
     })
-
     .controller('LoginCtrl', function ($scope, $ionicModal, $timeout, $ionicLoading, $ionicPopup, $state, Auth) {
         // Form data for the login modal
         $scope.loginData = {};
@@ -97,10 +90,7 @@ angular.module('starter.controllers', [])
                 $state.go('dash');
                 $ionicLoading.hide();
 
-                /*   setTimeout(function () {
-
-                 }, 1000);*/
-
             });
         };
     });
+
