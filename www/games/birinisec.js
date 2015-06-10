@@ -3,7 +3,7 @@
  */
 
 
-function runBiriniSecGame($state) {
+function runBiriniSecGame($state, socket, gamedata) {
 
     var currentGame = {
         correct_image: null,
@@ -98,6 +98,7 @@ function runBiriniSecGame($state) {
     function back_click() {
         if (currentGame.state == 0) {
             console.log("Go to game list");
+            socket.emit('game:end', {game_id: gamedata.id});
             $state.go('dash');
         } else {
             showMenu();
@@ -127,7 +128,8 @@ function runBiriniSecGame($state) {
             images[i].sfx = game.add.audio(images[i].id);
             images[i].sfx_show = game.add.audio(images[i].id + "_show");
         }
-        shuffle(images)
+        shuffle(images);
+        socket.emit('game:start', {game_id: gamedata.id});
     }
 
     function addButton(x, y) {
@@ -165,6 +167,7 @@ function runBiriniSecGame($state) {
         if (currentGame.correct_image == img.id) {
             img.sfx.play();
             currentGame.state = 2;
+            socket.emit('answer:correct', {game_id: gamedata.id});
             hideSprite(currentGame.danger_sprites[0]);
             hideSprite(currentGame.danger_sprites[1]);
             moveSpriteTo(currentGame.active_sprite, function () {
@@ -172,6 +175,8 @@ function runBiriniSecGame($state) {
             });
         } else {
             audio_yanlis.play();
+            socket.emit('answer:wrong', {game_id: gamedata.id});
+
         }
     }
 

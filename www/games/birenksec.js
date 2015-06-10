@@ -3,7 +3,7 @@
  */
 
 
-function runBiRenkSecGame($state) {
+function runBiRenkSecGame($state, socket, gamedata) {
 
     var currentGame = {
         correct_image: null,
@@ -54,7 +54,7 @@ function runBiRenkSecGame($state) {
         }, {
             id: "yesil",
             audio: "yesil.mp3",
-            audio_show: "yeşiligoster.mp3",
+            audio_show: "yesiligoster.mp3",
             color: 0x00FF00,
             name: "Yeşil"
         }
@@ -86,6 +86,7 @@ function runBiRenkSecGame($state) {
     function back_click() {
         if (currentGame.state == 0) {
             console.log("Go to game list");
+            socket.emit('game:end', {game_id: gamedata.id});
             $state.go('dash');
         } else {
             showMenu();
@@ -115,7 +116,8 @@ function runBiRenkSecGame($state) {
             images[i].sfx = game.add.audio(images[i].id);
             images[i].sfx_show = game.add.audio(images[i].id + "_show");
         }
-        shuffle(images)
+        shuffle(images);
+        socket.emit('game:start', {game_id: gamedata.id});
     }
 
     function addButton(x, y) {
@@ -154,6 +156,9 @@ function runBiRenkSecGame($state) {
         if (currentGame.correct_image == img.id) {
             img.sfx.play();
             currentGame.state = 2;
+
+            socket.emit('answer:correct', {game_id: gamedata.id});
+
             hideSprite(currentGame.danger_sprites[0]);
             hideSprite(currentGame.danger_sprites[1]);
             moveSpriteTo(currentGame.active_sprite, function () {
@@ -161,6 +166,8 @@ function runBiRenkSecGame($state) {
             });
         } else {
             audio_yanlis.play();
+            socket.emit('answer:wrong', {game_id: gamedata.id});
+
         }
     }
 

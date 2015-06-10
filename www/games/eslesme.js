@@ -3,7 +3,7 @@
  */
 
 
-function runEslemeGame($state) {
+function runEslemeGame($state, socket, gamedata) {
 
     var currentGame = {
         active_sprite: null,
@@ -87,6 +87,7 @@ function runEslemeGame($state) {
     function back_click() {
         if (currentGame.state == 0) {
             console.log("Go to game list");
+            socket.emit('game:end', {game_id: gamedata.id});
             $state.go('dash');
         } else {
             showMenu();
@@ -106,6 +107,8 @@ function runEslemeGame($state) {
         audio_yanlis = game.add.audio('yanlis');
         audio_dogru = game.add.audio('dogru');
         audio_bitti = game.add.audio('gorevbitti');
+
+        socket.emit('game:start', {game_id: gamedata.id});
     }
 
     function addButton(category, x, y) {
@@ -297,6 +300,8 @@ function runEslemeGame($state) {
                 goToNext();
             });
 
+            socket.emit('answer:correct', {game_id: gamedata.id});
+
             return;
         }
         for (var i = 0; i < 2; i++) {
@@ -308,6 +313,9 @@ function runEslemeGame($state) {
                 setTimeout(function () {
                     currentGame.active_sprite.inputEnabled = true;
                 }, 200);
+
+                socket.emit('answer:wrong', {game_id: gamedata.id});
+
                 return;
             }
         }

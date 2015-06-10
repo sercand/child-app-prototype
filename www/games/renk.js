@@ -3,7 +3,7 @@
  */
 
 
-function runRenkGame($state) {
+function runRenkGame($state, socket, gamedata) {
 
     var currentGame = {
         active_sprite: null,
@@ -73,6 +73,7 @@ function runRenkGame($state) {
     function back_click() {
         if (currentGame.state == 0) {
             console.log("Go to game list");
+            socket.emit('game:end', {game_id: gamedata.id});
             $state.go('dash');
         } else {
             showMenu();
@@ -96,6 +97,8 @@ function runRenkGame($state) {
         for (var i = 0; i < images.length; i++) {
             images[i].sfx = game.add.audio(images[i].id);
         }
+        socket.emit('game:start', {game_id: gamedata.id});
+
     }
 
     function addButton(x, y) {
@@ -268,6 +271,8 @@ function runRenkGame($state) {
             audio_dogru.play();
             currentGame.state = 2;
             currentGame.active_sprite.inputEnabled = false;
+            socket.emit('answer:correct', {game_id: gamedata.id});
+
             moveSpriteTo(currentGame.target_sprite, false);
             hideSprite(currentGame.danger_sprites[0]);
             hideSprite(currentGame.danger_sprites[1]);
@@ -283,6 +288,9 @@ function runRenkGame($state) {
                 currentGame.active_sprite.x = 150;
                 currentGame.active_sprite.y = game.world.centerY;
                 currentGame.active_sprite.inputEnabled = false;
+
+                socket.emit('answer:wrong', {game_id: gamedata.id});
+
                 setTimeout(function () {
                     currentGame.active_sprite.inputEnabled = true;
                 }, 200);

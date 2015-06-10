@@ -2,9 +2,8 @@
  * Created by Zafer on 9.6.2015.
  */
 var nextgame = null;
-angular.module('starter.controllers', [])
-
-    .controller('DashCtrl', function ($scope, $state, $http, Auth) {
+angular.module('starter.controllers', ['btford.socket-io'])
+    .controller('DashCtrl', function ($scope, $state, $http, Auth, socket) {
 
         $scope.openGame = function (game) {
             console.log(game.name);
@@ -13,6 +12,12 @@ angular.module('starter.controllers', [])
         };
 
         $scope.chunkedData = [];
+
+        socket.on('connect', function (data) {
+            socket.emit('init', {
+                parent_id: Auth.parentId
+            });
+        });
 
         function addToChunkedData(data) {
             console.log(data);
@@ -52,15 +57,16 @@ angular.module('starter.controllers', [])
         }
 
         loadGames(Auth.child.games);
+
     })
 
-    .controller('GameCtrl', function ($scope, $ionicLoading, $state) {
+    .controller('GameCtrl', function ($scope, $ionicLoading, $state, socket) {
         $scope.isReady = function () {
             console.log("IS READY");
         };
         console.log(nextgame.name);
         if (typeof nextgame.run === 'function') {
-            nextgame.run($state);
+            nextgame.run($state, socket, nextgame);
         }
     })
     .controller('LoginCtrl', function ($scope, $ionicModal, $timeout, $ionicLoading, $ionicPopup, $state, Auth) {
@@ -92,5 +98,13 @@ angular.module('starter.controllers', [])
 
             });
         };
-    });
+    })
+    .factory('socket', function (socketFactory) {
+        var myIoSocket = io.connect('http://localhost:6001');
 
+        mySocket = socketFactory({
+            ioSocket: myIoSocket
+        });
+
+        return mySocket;
+    });
