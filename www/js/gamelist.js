@@ -7,10 +7,34 @@
 var playableGameList = [
     {
         id: "5576cbff4a2caa680b4318fc",
-        name: "Eslesme oyunu",
+        name: "Esya Eslesme Oyunu",
+        logo: "../img/app1.png",
+        run: function (state) {
+            runEslemeGame(state);
+        }
+    },
+    {
+        id: "557785d85c21a8d378fce8bc",
+        name: "Renk Eslesme Oyunu",
+        logo: "../img/app2.png",
+        run: function (state) {
+            runRenkGame(state);
+        }
+    },
+    {
+        id: "557785d85c21a8d378fce8bc",
+        name: "Bir Renk Sec",
         logo: "../img/app3.png",
         run: function (state) {
             runBiRenkSecGame(state);
+        }
+    },
+    {
+        id: "557785f55c21a8d378fce8bd",
+        name: "Birini Sec",
+        logo: "../img/app4.png",
+        run: function (state) {
+            runBiriniSecGame(state);
         }
     }
 ];
