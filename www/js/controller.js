@@ -100,7 +100,7 @@ angular.module('starter.controllers', ['btford.socket-io'])
         };
     })
     .factory('socket', function (socketFactory) {
-        var myIoSocket = io.connect('http://localhost:6001');
+        var myIoSocket = io.connect("http://46.101.185.157:6001");
 
         mySocket = socketFactory({
             ioSocket: myIoSocket
