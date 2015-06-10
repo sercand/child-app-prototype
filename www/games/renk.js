@@ -282,6 +282,10 @@ function runRenkGame($state) {
                 audio_yanlis.play();
                 currentGame.active_sprite.x = 150;
                 currentGame.active_sprite.y = game.world.centerY;
+                currentGame.active_sprite.inputEnabled = false;
+                setTimeout(function () {
+                    currentGame.active_sprite.inputEnabled = true;
+                }, 200);
                 return;
             }
         }
